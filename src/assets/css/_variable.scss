@@ -1,0 +1,19 @@
+
+@use "sass:math";
+
+$bg-color: #edf1f5;
+$base-text-color: #606266;
+$color-primary: #269bff;
+$color-dark: #000;
+$color-light: #fff;
+$color-main: #E62903;
+$color-red: #BF242A;
+$color-gray: #eee;
+
+// $line-height: 20 / 14;
+$line-height: math.div(20, 14);
+$header-height: 80px;
+$header-border-bottom-width: 4px;
+$header-border-color: #e82703;
+
+$footer-height: 60px;
