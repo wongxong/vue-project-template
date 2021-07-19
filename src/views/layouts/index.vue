@@ -10,9 +10,7 @@
     name: 'Layout',
     methods: {
       handleLogout() {
-        this.$store.dispatch('logout').then(_ => {
-          window.location.reload();
-        });
+        this.$store.dispatch('logout');
       }
     }
   }
