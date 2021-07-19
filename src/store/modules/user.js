@@ -21,7 +21,9 @@ export const user = {
       removeAuth();
       commit("SET_TOKEN", '');
       logout_api();
-      return Promise.resolve();
+      return Promise.resolve().then(_ => {
+        window.location.reload();
+      });
     }
   }
 };
