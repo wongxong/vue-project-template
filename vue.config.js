@@ -49,6 +49,13 @@ module.exports = {
       .end();
 
     if (isProduction) {
+      config.plugin("webpack-dll-plugin").use(webpack.DllPlugin, [
+        {
+          path: './manifest.json',
+          name: '[name]_library'
+        }
+      ]);
+      
       config.plugin("compression").use(CompressionPlugin, [
         {
           test: /\.(js|css|html|json)$/,
