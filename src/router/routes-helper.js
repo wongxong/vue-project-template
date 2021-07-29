@@ -10,6 +10,8 @@ export function transformRoutes(routes) {
       route.component = importComponent(route.component);
     }
 
+    route.meta = route.meta || {};
+
     if (isArray(route.children)) {
       route.children = transformRoutes(route.children);
     }

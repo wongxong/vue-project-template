@@ -10,7 +10,7 @@ function resolve(dir) {
 
 module.exports = {
   devServer: {
-    port: 7777
+    port: 7778
   },
   productionSourceMap: false,
   css: {
@@ -32,7 +32,9 @@ module.exports = {
     });
 
     // 移除 prefetch 插件
-    config.plugins.delete('prefetch');
+    config.plugins.delete("prefetch");
+    // 移除 preload 插件
+    config.plugins.delete("preload");
 
     config.module.rule("svg").exclude.add(resolve("src/icons/svg"));
 
@@ -49,13 +51,6 @@ module.exports = {
       .end();
 
     if (isProduction) {
-      config.plugin("webpack-dll-plugin").use(webpack.DllPlugin, [
-        {
-          path: './manifest.json',
-          name: '[name]_library'
-        }
-      ]);
-      
       config.plugin("compression").use(CompressionPlugin, [
         {
           test: /\.(js|css|html|json)$/,

@@ -1,5 +1,8 @@
 import Vue from "vue";
 import {
+  Menu,
+  Submenu,
+  MenuItem,
   Pagination,
   Dialog,
   Table,
@@ -31,6 +34,9 @@ Vue.prototype.$ELEMENT = {
 };
 
 [
+  Menu,
+  Submenu,
+  MenuItem,
   Pagination,
   Dialog,
   Table,
