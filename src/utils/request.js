@@ -4,6 +4,8 @@ import store from '@/store';
 import { getAuth } from './auth';
 import { Message } from 'element-ui';
 
+export const CancelToken = axios.CancelToken;
+
 export const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL || '',
   timeout: 3 * 5000,
@@ -33,9 +35,27 @@ service.interceptors.request.use(
 );
 
 service.interceptors.response.use(
-  response => {
-    console.log(response);
-    return response;
+  ({ data }) => {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(data);
+    }
+    // if (data === "Unauthorized") {
+    //   store.dispatch("logout").then(() => {
+    //     window.location.reload();
+    //   });
+    //   return Promise.reject("Unauthorized");
+    // }
+    // if (data.meta) {
+    //   if (data.meta.code === 200) {
+    //     return data.response;
+    //   }
+
+    //   if (data.meta.code === 400) {
+    //     globalErrorNotify(data.meta);
+    //     return Promise.reject(data.meta);
+    //   }
+    // }
+    return data;
   },
   // response => {
   //   const res = response.data
@@ -65,15 +85,23 @@ service.interceptors.response.use(
   //   }
   // },
   error => {
-    console.log('【interceptors.response', error);
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    });
+    console.log("【interceptors.response", error);
+    globalErrorNotify(error);
     return Promise.reject(error);
   }
 );
+
+export function globalErrorNotify(error) {
+  if (typeof error === "string") {
+    error = { error };
+  }
+
+  Message({
+    message: error.message,
+    type: "error",
+    duration: 5 * 1000
+  });
+}
 
 export const request = service;
 

@@ -1,8 +1,13 @@
 import Vue from "vue";
 import {
+  Row,
+  Col,
   Menu,
   Submenu,
   MenuItem,
+  Dropdown,
+  DropdownItem,
+  Tooltip,
   Pagination,
   Dialog,
   Table,
@@ -28,15 +33,26 @@ import {
   Notification
 } from "element-ui";
 
+import GlobalPagination from "./components/global-pagination";
+
+[GlobalPagination].forEach(component => {
+  Vue.component(component.name, component);
+});
+
 Vue.prototype.$ELEMENT = { 
   size: "small", 
   zIndex: 2000 
 };
 
 [
+  Row,
+  Col,
   Menu,
   Submenu,
   MenuItem,
+  Dropdown,
+  DropdownItem,
+  Tooltip,
   Pagination,
   Dialog,
   Table,
@@ -65,7 +81,19 @@ Vue.use(Loading.directive);
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;
-Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$confirm = function(message, options) {
+  return MessageBox.confirm(
+    message,
+    Object.assign(
+      {
+        title: "确认框",
+        cancelButtonClass: "el-button--primary",
+        confirmButtonClass: "el-button--danger"
+      },
+      options
+    )
+  );
+};
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
