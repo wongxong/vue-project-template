@@ -30,17 +30,24 @@ import {
   Loading,
   MessageBox,
   Message,
-  Notification
+  Notification,
+  RadioGroup,
+  Radio
 } from "element-ui";
 
 import GlobalPagination from "./components/global-pagination";
+import {
+  globalConfirm,
+  globalErrorMessage,
+  globalSuccessMessage
+} from "./utils/global-notify";
 
 [GlobalPagination].forEach(component => {
   Vue.component(component.name, component);
 });
 
 Vue.prototype.$ELEMENT = { 
-  size: "small", 
+  // size: "small", 
   zIndex: 2000 
 };
 
@@ -71,7 +78,9 @@ Vue.prototype.$ELEMENT = {
   Empty,
   Collapse,
   CollapseItem,
-  Tree
+  Tree,
+  RadioGroup,
+  Radio
 ].forEach(component => {
   Vue.use(component);
 });
@@ -95,5 +104,8 @@ Vue.prototype.$confirm = function(message, options) {
   );
 };
 Vue.prototype.$prompt = MessageBox.prompt;
+Vue.prototype.$confirm = globalConfirm;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+Vue.prototype.$errorMsg = globalErrorMessage;
+Vue.prototype.$successMsg = globalSuccessMessage;

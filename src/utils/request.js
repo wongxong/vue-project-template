@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import store from '@/store';
 import { getAuth } from './auth';
-import { Message } from 'element-ui';
+import { globalErrorMessage } from "./utils/global-notify";
 
 export const CancelToken = axios.CancelToken;
 
@@ -39,22 +39,6 @@ service.interceptors.response.use(
     if (process.env.NODE_ENV !== "production") {
       console.log(data);
     }
-    // if (data === "Unauthorized") {
-    //   store.dispatch("logout").then(() => {
-    //     window.location.reload();
-    //   });
-    //   return Promise.reject("Unauthorized");
-    // }
-    // if (data.meta) {
-    //   if (data.meta.code === 200) {
-    //     return data.response;
-    //   }
-
-    //   if (data.meta.code === 400) {
-    //     globalErrorNotify(data.meta);
-    //     return Promise.reject(data.meta);
-    //   }
-    // }
     return data;
   },
   // response => {
@@ -86,37 +70,45 @@ service.interceptors.response.use(
   // },
   error => {
     console.log("【interceptors.response", error);
-    globalErrorNotify(error);
+    try {
+      if (error.response.status === 401) {
+        store.dispatch("logout").then(() => {
+          window.location.reload();
+        });
+        return Promise.reject(error);
+      }
+    } catch (e) {
+
+    }
+    globalErrorMessage(error);
     return Promise.reject(error);
   }
 );
 
-export function globalErrorNotify(error) {
-  if (typeof error === "string") {
-    error = { error };
-  }
-
-  Message({
-    message: error.message,
-    type: "error",
-    duration: 5 * 1000
-  });
-}
-
 export const request = service;
 
-export function get(url, params) {
-  return service({
-    method: 'get',
-    url,
-    params
-  })
+export function get(url, params, option) {
+  return service(
+    Object.assign(
+      {
+        method: "get",
+        url,
+        params
+      },
+      option
+    )
+  );
 }
 
-export function post(url, data) {
-  return service({
-    method: 'post',
-    url,
-    data
-  })
+export function post(url, data, option) {
+  return service(
+    Object.assign(
+      {
+        method: "post",
+        url,
+        data
+      },
+      option
+    )
+  );
 }
